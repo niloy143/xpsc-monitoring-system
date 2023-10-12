@@ -1,0 +1,1 @@
+export type Batch = "Batch 03" | "Batch 02"
