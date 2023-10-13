@@ -1,12 +1,12 @@
 import { Table } from "flowbite-react";
 import { Batch } from "../types/batch-types";
-import { codeForcesUsernames } from "../utils/codeforces-users";
+import { codeChefUsernames } from "../utils/codechef-users";
 
 type Props = {
   batch: Batch;
 };
 
-export default function CodeForcesUsersTable({ batch }: Props) {
+export default function CodeChefUsersTable({ batch }: Props) {
   return (
     <Table striped className="dark text-gray-300 text-base">
       <Table.Head>
@@ -20,7 +20,7 @@ export default function CodeForcesUsersTable({ batch }: Props) {
         <Table.HeadCell className="text-base">Max Rating</Table.HeadCell>
       </Table.Head>
       <Table.Body className="divide-y">
-        {codeForcesUsernames[batch].map((username) => {
+        {codeChefUsernames[batch].map((username) => {
           return (
             <Table.Row key={username}>
               <Table.Cell>
