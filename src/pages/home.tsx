@@ -1,11 +1,9 @@
 import { Dropdown } from "flowbite-react";
 import { useState } from "react";
-import { Platform } from "../types/platform-types";
-import { Batch } from "../types/batch-types";
-import UsersTable from "../components/users-table";
-
-const platforms: Platform[] = ["CodeForces", "CodeChef"];
-const batches: Batch[] = ["Batch 03", "Batch 02"];
+import CodeForcesUsersTable from "../components/codeforces-users-table";
+import { codeForcesUsers } from "../utils/mock-data";
+import { platforms } from "../types/platform-types";
+import { batches } from "../types/batch-types";
 
 export default function HomePage() {
   const [platform, setPlatform] = useState(platforms[0]);
@@ -37,7 +35,7 @@ export default function HomePage() {
         </Dropdown>
       </div>
 
-      <UsersTable />
+      <CodeForcesUsersTable users={codeForcesUsers} />
     </div>
   );
 }
