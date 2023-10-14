@@ -1,47 +1,22 @@
 import { Avatar, Table, Tooltip } from "flowbite-react";
 import { Batch } from "../types/batch-types";
 import { codeForcesUsernames } from "../utils/codeforces-users";
-import { useQuery } from "@tanstack/react-query";
 import { PulseLoader, PuffLoader } from "react-spinners";
-import axios from "axios";
-import { CodeForcesUser } from "../types/codeforces-user";
 import { redirectTo } from "../utils/redirect";
-import { codeForcesProfileLink, codeForcesUserAPI } from "../utils/links";
+import { codeForcesProfileLink } from "../utils/links";
 import { BiSortDown } from "react-icons/bi";
 import { useState } from "react";
+import useCodeForcesUsers from "../hooks/use-codeforces-users";
 
 type Props = {
   batch: Batch;
-};
-
-type UsersResult = {
-  status: string;
-  result: CodeForcesUser[];
-};
-
-type UsersData = {
-  [key: string]: CodeForcesUser;
 };
 
 type SortType = "RATING" | "MAX_RATING";
 
 export default function CodeForcesUsersTable({ batch }: Props) {
   const [sort, setSort] = useState<SortType>("RATING");
-  const { data: users, isLoading } = useQuery({
-    queryKey: [batch, "codeforces"],
-    queryFn: async () => {
-      const { data } = await axios.get<UsersResult>(
-        codeForcesUserAPI(codeForcesUsernames[batch])
-      );
-
-      const newData: UsersData = {};
-      data?.result?.forEach((user) => {
-        newData[user.handle!] = user;
-      });
-
-      return newData;
-    },
-  });
+  const { data: users, isLoading } = useCodeForcesUsers(batch);
 
   return (
     <Table striped className="dark text-gray-300 text-base">

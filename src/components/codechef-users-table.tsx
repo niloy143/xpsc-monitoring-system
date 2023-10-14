@@ -1,27 +1,16 @@
 import { Avatar, Table } from "flowbite-react";
 import { Batch } from "../types/batch-types";
 import { codeChefUsernames } from "../utils/codechef-users";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { CodeChefUser } from "../types/codechef-user";
-import { codeChefProfileLink, codeChefUserAPI } from "../utils/links";
-import bulkAsync from "../utils/bulk-async";
+import { codeChefProfileLink } from "../utils/links";
 import { redirectTo } from "../utils/redirect";
 import { PuffLoader, PulseLoader } from "react-spinners";
 import { AiFillStar } from "react-icons/ai";
 import { BiSortDown } from "react-icons/bi";
 import { useState } from "react";
+import useCodeChefUsers from "../hooks/use-codechef-users";
 
 type Props = {
   batch: Batch;
-};
-
-type UsersResult = {
-  data: CodeChefUser;
-};
-
-type UsersData = {
-  [key: string]: CodeChefUser | undefined | null;
 };
 
 type SortType = "RATING" | "MAX_RATING";
@@ -29,23 +18,7 @@ type SortType = "RATING" | "MAX_RATING";
 export default function CodeChefUsersTable({ batch }: Props) {
   const [sort, setSort] = useState<SortType>("RATING");
 
-  const { data: users, isLoading } = useQuery({
-    queryKey: [batch, "codechef"],
-    queryFn: async () => {
-      const actions = codeChefUsernames[batch].map((username) => {
-        return async () =>
-          axios.get(codeChefUserAPI(username)).then(({ data }) => data);
-      });
-      const data = await bulkAsync<UsersResult>(actions);
-      const newData: UsersData = {};
-      data.result.forEach((data) => {
-        const user = data.data?.data;
-        if (user?.username) newData[user.username] = user;
-      });
-
-      return newData;
-    },
-  });
+  const { data: users, isLoading } = useCodeChefUsers(batch);
 
   return (
     <Table striped className="dark text-gray-300 text-base">
