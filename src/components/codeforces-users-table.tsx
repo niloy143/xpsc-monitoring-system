@@ -6,7 +6,7 @@ import { PulseLoader, PuffLoader } from "react-spinners";
 import axios from "axios";
 import { CodeForcesUser } from "../types/codeforces-user";
 import { redirectTo } from "../utils/redirect";
-import { codeForcesProfileLink } from "../utils/links";
+import { codeForcesProfileLink, codeForcesUserAPI } from "../utils/links";
 import { BiSortDown } from "react-icons/bi";
 import { useState } from "react";
 
@@ -28,12 +28,10 @@ type SortType = "RATING" | "MAX_RATING";
 export default function CodeForcesUsersTable({ batch }: Props) {
   const [sort, setSort] = useState<SortType>("RATING");
   const { data: users, isLoading } = useQuery({
-    queryKey: [batch],
+    queryKey: [batch, "codeforces"],
     queryFn: async () => {
       const { data } = await axios.get<UsersResult>(
-        `https://codeforces.com/api/user.info?handles=${codeForcesUsernames[
-          batch
-        ].join(";")}`
+        codeForcesUserAPI(codeForcesUsernames[batch])
       );
 
       const newData: UsersData = {};
@@ -48,22 +46,22 @@ export default function CodeForcesUsersTable({ batch }: Props) {
   return (
     <Table striped className="dark text-gray-300 text-base">
       <Table.Head>
-        <Table.HeadCell className="text-base w-[75px]">NO.</Table.HeadCell>
+        <Table.HeadCell className="text-base max-w-[75px]">NO.</Table.HeadCell>
         <Table.HeadCell className="text-base">Candidate</Table.HeadCell>
-        <Table.HeadCell
-          className="text-base cursor-pointer"
-          onClick={() => setSort("RATING")}
-        >
-          <h3 className="flex items-center gap-2">
+        <Table.HeadCell className="text-base">
+          <h3
+            className="inline-flex items-center gap-2 cursor-pointer"
+            onClick={() => setSort("RATING")}
+          >
             <span>Rating </span>
             {sort === "RATING" ? <BiSortDown className="text-xl" /> : null}
           </h3>
         </Table.HeadCell>
-        <Table.HeadCell
-          className="text-base cursor-pointer"
-          onClick={() => setSort("MAX_RATING")}
-        >
-          <h3 className="flex items-center gap-2">
+        <Table.HeadCell className="text-base">
+          <h3
+            className="inline-flex items-center gap-2 cursor-pointer"
+            onClick={() => setSort("MAX_RATING")}
+          >
             <span>Max Rating </span>
             {sort === "MAX_RATING" ? <BiSortDown className="text-xl" /> : null}
           </h3>
@@ -98,7 +96,9 @@ export default function CodeForcesUsersTable({ batch }: Props) {
                       >
                         <Avatar
                           size="sm"
-                          placeholderInitials={fullName?.[0] || username[0]}
+                          placeholderInitials={(
+                            fullName?.[0] || username[0]
+                          ).toUpperCase()}
                           img={`${user?.avatar || ""}`}
                         />
                       </Tooltip>
