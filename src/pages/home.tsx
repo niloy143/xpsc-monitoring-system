@@ -4,15 +4,10 @@ import CodeForcesUsersTable from "../components/codeforces-users-table";
 import { platforms } from "../types/platform-types";
 import { batches } from "../types/batch-types";
 import CodeChefUsersTable from "../components/codechef-users-table";
-import useCodeChefUsers from "../hooks/use-codechef-users";
-import useCodeForcesUsers from "../hooks/use-codeforces-users";
 
 export default function HomePage() {
   const [platform, setPlatform] = useState(platforms[0]);
   const [batch, setBatch] = useState(batches[0]);
-
-  useCodeChefUsers(batch);
-  useCodeForcesUsers(batch);
 
   return (
     <div className="p-12 max-w-7xl mx-auto flex flex-col gap-3 relative">
