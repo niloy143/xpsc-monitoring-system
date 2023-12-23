@@ -87,7 +87,7 @@ export default function CodeChefUsersTable({ batch }: Props) {
                           <div className="flex items-center gap-1">
                             <span>{user?.name || "Not Available"}</span>
                             <span className="flex items-center">
-                              {Array(stars).fill(<AiFillStar />)}
+                              {Array(stars).fill(null).map(() => <AiFillStar key={Math.random()} />)}
                             </span>
                           </div>
                         )}

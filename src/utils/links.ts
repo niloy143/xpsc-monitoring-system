@@ -1,4 +1,4 @@
-const codeChefAPI = import.meta.env.VITE_CODE_CHEF_API;
+const codeChefAPI = import.meta.env.VITE_CODECHEF_API;
 
 export function codeForcesProfileLink(username: string) {
     return `https://codeforces.com/profile/${username}`
